@@ -131,3 +131,37 @@ class Solution:
         words = s.split()
         return " ".join(reversed(words))
 ```
+
+### 238. Product of Array Except Self 除自身以外数组的乘积 (Medium)
+
+[题目链接](https://leetcode.com/problems/product-of-array-except-self/)
+
+- 题目：盖住一格，把剩下的数乘起来；不许用除法，要 O(n)
+- 思路（三步，先学这个版本）：左边一排存每格的"左边乘积" → 右边一排存"右边乘积"（写法和左边对称）→ 逐格 左 × 右
+- 套路：前缀积 / 后缀积（第 4 类前缀和的乘法版），见 patterns.md
+- 易错：每格先抄、再乘（顺序反了会把自己算进去）；起点 left = 1、right = 1（乘法里"还没有数"是 1，写 0 会全变 0）
+- 省空间版（Follow up，O(1) 额外空间）：不另开 right_products，把右边乘积直接乘进 answer，熟了再看
+- 时间 O(n)，空间 O(n)
+
+```python
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+
+        left_products = [1] * n
+        left = 1
+        for i in range(n):
+            left_products[i] = left
+            left = left * nums[i]
+
+        right_products = [1] * n
+        right = 1
+        for i in reversed(range(n)):
+            right_products[i] = right
+            right = right * nums[i]
+
+        answer = []
+        for i in range(n):
+            answer.append(left_products[i] * right_products[i])
+        return answer
+```
