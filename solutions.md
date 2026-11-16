@@ -115,3 +115,19 @@ class Solution:
                 right = right - 1
         return "".join(chars)
 ```
+
+### 151. Reverse Words in a String 反转字符串中的单词 (Medium)
+
+[题目链接](https://leetcode.com/problems/reverse-words-in-a-string/)
+
+- 思路：split() 切成单词 → reversed() 倒过来 → " ".join() 用一个空格拼回
+- 易错：split() 括号要空着（自动去掉首尾和多余空格）；split(" ") 会切出空字符串 ''
+- 和 NLP 的关系：清理空格 = text normalization，split() = 最简单的 tokenization
+- 时间 O(n)，空间 O(n)
+
+```python
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        words = s.split()
+        return " ".join(reversed(words))
+```
