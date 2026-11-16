@@ -94,7 +94,7 @@ class Solution:
 [题目链接](https://leetcode.com/problems/reverse-vowels-of-a-string/)
 
 - 套路：双指针，相向而行（left 从左、right 从右，往中间走，碰头就停）
-- 第一次盲写（2026-11-15）忘了 while → 只走一步就 return
+- 第一遍练写（2026-11-15）忘了 while → 只走一步就 return
 - 时间 O(n)，空间 O(n)
 
 ```python
