@@ -13,5 +13,5 @@ Notes in the code and in patterns.md are mostly in Chinese.
 
 | # | Pattern | Done |
 |---|---------|------|
-| 1 | Array / String | 7 / 9 |
+| 1 | Array / String | 8 / 9 |
 | 2 | Two Pointers | 0 / 4 |

@@ -165,3 +165,28 @@ class Solution:
             answer.append(left_products[i] * right_products[i])
         return answer
 ```
+
+### 334. Increasing Triplet Subsequence 递增的三元子序列 (Medium)
+
+[题目链接](https://leetcode.com/problems/increasing-triplet-subsequence/)
+
+- 题目：有没有三个数，位置从左到右、数字越来越大（严格变大，相等不算）；只问有没有，找到一组就 True
+- 思路：first = 目前见过的最小；second = 在某个更小的数后面出现的第二小。来一个数：比 first 小 → 更新 first；否则比 second 小 → 更新 second；比两个都大 → 凑齐三个，True
+- 起始值：first、second 都放 float("inf") 无穷大（找最小从最大的开始，第一个数一定能顶掉它）
+- 易错：必须用 <=，不能用 <（第一遍提交写成 <，挂在全是 1 的测试：相等的数掉到下一档，1 < 1 < 1 被当成 True）
+- 时间 O(n)，空间 O(1)
+
+```python
+class Solution:
+    def increasingTriplet(self, nums: List[int]) -> bool:
+        first = float("inf")
+        second = float("inf")
+        for num in nums:
+            if num <= first:
+                first = num
+            elif num <= second:
+                second = num
+            else:
+                return True
+        return False
+```
