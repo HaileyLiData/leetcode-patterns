@@ -190,3 +190,37 @@ class Solution:
                 return True
         return False
 ```
+
+### 443. String Compression 压缩字符串 (Medium)
+
+[题目链接](https://leetcode.com/problems/string-compression/)
+
+- 题目：连续重复的字母 → 字母 + 个数（1 个不写个数；10 个以上拆成多位，12 → '1' '2'）；直接写回 chars（覆盖着写），返回新长度；超出返回长度的格子不用管
+- 思路：三根手指，每组做三步「数、写、跳」
+  - 数：j 从 i 同一格出发往后走，停在重复的字母之后、新开始的字母那里 → 个数 = j - i（j 自己不算，不用 + 1）
+  - 写：在 write 格写字母；个数 > 1 时 str(个数) 一位一位写进去；每写一格 write 走一步
+  - 跳：i = j，去下一组
+- 为什么覆盖不出错：写的格数不会比读的多，write 永远不会跑到 i 前面
+- i 和 write 都从 0 开始但会分开：i 记读到哪（会跳），write 记写到哪；return 的是 write
+- ch = chars[i] 只是为了好读，直接写 chars[i] 也对
+- 时间 O(n)，空间 O(1)
+
+```python
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+        write = 0
+        i = 0
+        while i < len(chars):
+            ch = chars[i]
+            j = i
+            while j < len(chars) and chars[j] == ch:
+                j = j + 1
+            chars[write] = ch
+            write = write + 1
+            if j - i > 1:
+                for d in str(j - i):
+                    chars[write] = d
+                    write = write + 1
+            i = j
+        return write
+```
