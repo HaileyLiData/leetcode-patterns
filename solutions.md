@@ -224,3 +224,29 @@ class Solution:
             i = j
         return write
 ```
+
+## 2. Two Pointers 双指针
+
+### 283. Move Zeroes 移动零 (Easy)
+
+[题目链接](https://leetcode.com/problems/move-zeroes/)
+
+- 题目：把所有 0 移到末尾，非零数保持原来的相对顺序（relative order）；必须原地改（in place），函数不 return
+- 思路：快慢两根手指，同向走
+  - slow = 下一个非零数该放第几格（不是“0 在哪”）；一开始还没放过，所以是 0
+  - fast 从头扫到尾；遇到非零数 → 和 slow 那格交换，slow 往前一格
+  - slow 落后 fast 时，slow 那格一定是 0 → 0 一个一个被换到后面
+- 交换 `nums[slow], nums[fast] = nums[fast], nums[slow]`：先把右边两个值都拿到手，再放进左边
+- 每一圈用的是交换后的 nums（原地改，只有一个 list）
+- 易错：交换只看 slow 和 fast 的格子号，不是把数挪到“最近的 0”；卡住先在数字上面写出格子号 0 1 2 3 4
+- 时间 O(n)，空间 O(1)
+
+```python
+class Solution:
+    def moveZeroes(self, nums: List[int]) -> None:
+        slow = 0
+        for fast in range(len(nums)):
+            if nums[fast] != 0:
+                nums[slow], nums[fast] = nums[fast], nums[slow]
+                slow = slow + 1
+```

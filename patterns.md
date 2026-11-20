@@ -96,7 +96,7 @@ for fast in range(len(arr)):    # fast 快指针：一格一格往前探路
 
 ### 每题变在哪
 - **345 Reverse Vowels**（相向，热身）：模板原样用。"符合条件" = 是元音；处理 = 交换 `chars[l], chars[r] = chars[r], chars[l]`。字符串不能改，先 `list(s)`，最后 `"".join(chars)`
-- **283 Move Zeroes**（同向）：（学到时填）
+- **283 Move Zeroes**（同向，快慢指针）：slow = 下一个非零数该放第几格，fast 从头扫；fast 遇到非零数就和 slow 交换、slow + 1。和 443 一样是覆盖写法，slow 永远不会跑到 fast 前面。易错：交换只看两个格子号，不是挪到“最近的 0”
 - **392 Is Subsequence**（同向，两个字符串）：（学到时填）
 - **11 Container With Most Water**（相向）：（学到时填）
 - **1679 Max Number of K-Sum Pairs**（相向，先排序）：（学到时填）
