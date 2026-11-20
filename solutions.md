@@ -250,3 +250,28 @@ class Solution:
                 nums[slow], nums[fast] = nums[fast], nums[slow]
                 slow = slow + 1
 ```
+
+### 392. Is Subsequence 判断子序列 (Easy)
+
+[题目链接](https://leetcode.com/problems/is-subsequence/)
+
+- 题目：s 是不是 t 的子序列：从 t 里删掉一些字母（可以一个都不删），不打乱剩下字母的相对位置，能不能得到 s（"ace" 是 "abcde" 的子序列，"aec" 不是）
+- 思路：两根手指，同向走，各管一个字符串
+  - ch 走 t：`for ch in t`，每圈一格
+  - i 指着 s = 下一个要找的字母；每圈只和 `s[i]` 这一个比，匹配上才 i + 1
+  - 隔开的字母：ch 照样走过去，i 原地等着
+  - 顺序乱了找不到：两根手指都只往前、不回头，i 一次只找一个
+- `i < len(s)` 每圈检查 i 还在不在 s 里（全找到后再读 s[i] 会 IndexError）；写在 and 前面：前面不成立就不看后面
+- `return i == len(s)`：== 自己就给出 True / False
+- 易错：第一次提交写成 `i = 1` → Wrong Answer 16 / 23，挂在 s = ""（应返回 True）。i = 1 跳过了 s[0]；从头开始的手指起点是 0。题目说 can be none → 想到空字符串
+- 时间 O(len(t))，空间 O(1)
+
+```python
+class Solution:
+    def isSubsequence(self, s: str, t: str) -> bool:
+        i = 0
+        for ch in t:
+            if i < len(s) and s[i] == ch:
+                i = i + 1
+        return i == len(s)
+```
