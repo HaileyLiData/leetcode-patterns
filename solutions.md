@@ -275,3 +275,40 @@ class Solution:
                 i = i + 1
         return i == len(s)
 ```
+
+### 11. Container With Most Water 盛最多水的容器 (Medium)
+
+[题目链接](https://leetcode.com/problems/container-with-most-water/)
+
+- 题目：每个数 = 一根竖线，下标 = 位置，值 = 高度；挑两根线和 x 轴组成桶，求最多装多少水。may not slant = 不允许倾斜 → 水只能到矮的那根
+- 水量 = 宽 × 高
+  - 宽 = 两根线的**下标相减**（不是数中间夹了几根）
+  - 高 = 两根里**矮的那根**（短板）
+- 思路：两根手指，相向走
+  - 先站两头（最宽），算水量，存进 best
+  - 每次扔掉**矮的那根**：它对面已经是离它最远的线，以后再配谁都更窄、水高也超不过它自己 → 它已交出最好成绩
+  - 高的留着；对面出现更高的线，它变成矮的一边，就轮到它走
+- 直接遍历（两层 for，每两根都配）答案也对，但 10 万根线 ≈ 50 亿次会超时；双指针最多 n 次
+- 易错 / 我卡住的地方：
+  - 两根一样高的 8，靠下标分辨（我先算成第二个 8 配 7 = 14，第一个 8 配 7 才是 49）
+  - 扔掉 7 不会丢 49：每圈**先算、先存进 best、最后才扔**
+  - `if` 不是“小于才移动”，每圈一定动一边，`if` 只是挑动哪边；一样高走 else
+- 时间 O(n)，空间 O(1)
+
+```python
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        left = 0
+        right = len(height) - 1
+        best = 0
+        while left < right:
+            width = right - left
+            h = min(height[left], height[right])
+            water = width * h
+            best = max(best, water)
+            if height[left] < height[right]:
+                left = left + 1
+            else:
+                right = right - 1
+        return best
+```
