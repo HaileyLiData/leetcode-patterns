@@ -312,3 +312,36 @@ class Solution:
                 right = right - 1
         return best
 ```
+
+### 1679. Max Number of K-Sum Pairs K 和数对的最大数目 (Medium)
+
+[题目链接](https://leetcode.com/problems/max-number-of-k-sum-pairs/)
+
+- 题目：一次操作 = 挑两个和等于 k 的数删掉（每个数只能用一次），最多能做几次（[3,1,3,4,3]，k = 6 → 三个 3 只能配一对 → 1）
+- 思路：**先排序**，再两根手指相向走
+  - 排序后最左 = 最小、最右 = 最大，下面三条才成立（原数组左右谁大谁小不一定）
+  - 和 < k：太小 → left + 1 换大的；左边这个数跟最大的配都不够，跟谁配都不够 → 扔掉
+  - 和 > k：太大 → right − 1 换小的；右边这个数跟最小的配都太大 → 扔掉
+  - 和 = k：配成一对，count + 1，两个数用掉了 → 两边都往里走
+- 和 11 同一个骨架：相向走、每步扔掉一个“已经没用”的数；11 扔矮的，这题看和比 k 小还是大
+- 时间 O(n log n)（排序），空间 O(1)
+
+```python
+class Solution:
+    def maxOperations(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        left = 0
+        right = len(nums) - 1
+        count = 0
+        while left < right:
+            s = nums[left] + nums[right]
+            if s == k:
+                count = count + 1
+                left = left + 1
+                right = right - 1
+            elif s < k:
+                left = left + 1
+            else:
+                right = right - 1
+        return count
+```
