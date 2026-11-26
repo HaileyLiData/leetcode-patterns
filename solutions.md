@@ -374,3 +374,37 @@ class Solution:
             best = max(best, window)
         return best / k
 ```
+
+### 1456. Maximum Number of Vowels in a Substring of Given Length 定长子串中元音的最大数目 (Medium)
+
+[题目链接](https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/)
+
+- 题目：s 里所有长度为 k 的子串（substring，连续的一段）中，元音字母（a、e、i、o、u）最多有几个
+- 思路：和 643 同一个定长窗口，框里算的不是“和”，而是“元音有几个”
+  - 第一段（还没滑）：数前 k 个字母里有几个元音 → count，也放进 best
+  - 第二段（开始滑）：进来的 `s[i]` 是元音 +1，出去的 `s[i - k]` 是元音 −1
+- `vowels = set("aeiou")`：set() 是 Python 自带函数，装成集合 {a, e, i, o, u}，只用来问“在不在”
+- 用**两个 if**，不是 if / elif：进来、出去可能都是元音，两件事都要做
+- 压缩写法（认识就行）：`sum(1 for ch in s[:k] if ch in vowels)`；`count + ((s[i] in vowels) - (s[i - k] in vowels))`（True 当 1、False 当 0）
+- 易错：
+  - `range(3, 9)` → 3, 4, 5, 6, 7, 8：**包含开头、不包含结尾**（我以为两头都不包含）；不确定就 `print(list(range(3, 9)))`
+  - 下标 + 1 = 第几个：k = 3、i = 3（第 4 个）进来，i − k = 0（第 1 个）出去
+- 时间 O(n)，空间 O(1)
+
+```python
+class Solution:
+    def maxVowels(self, s: str, k: int) -> int:
+        vowels = set("aeiou")
+        count = 0
+        for ch in s[:k]:
+            if ch in vowels:
+                count = count + 1
+        best = count
+        for i in range(k, len(s)):
+            if s[i] in vowels:
+                count = count + 1
+            if s[i - k] in vowels:
+                count = count - 1
+            best = max(best, count)
+        return best
+```
