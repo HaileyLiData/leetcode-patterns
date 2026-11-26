@@ -134,6 +134,52 @@ for fast in range(len(arr)):    # fast 快指针：一格一格往前探路
 
 ---
 
+## 3. Sliding Window 滑动窗口（第 3 类，11/25 开始）
+
+### 套路是什么
+一个框（窗口 window）框住数组里**连续的一段**，从左往右滑。每滑一格，右边进来一个、左边出去一个，**只改这两个数**，不用把整段重新算一遍：一段一段重算是 O(n × k)，滑动是 O(n)。
+
+两种窗口：
+- **定长**（fixed size）：框的长度固定是 k（643、1456）
+- **可变长**（variable size）：右边一直扩，不符合条件时左边收（1004、1493，学到时补）
+
+### 模板代码
+
+**定长窗口**
+```python
+window = 算前 k 个（如 sum(nums[:k])）   # 第一个窗口，下标 0 ~ k-1
+best = window
+for i in range(k, len(nums)):            # i = 新进来的数的下标，从 k 开始
+    window = window + 进来的 nums[i] - 出去的 nums[i - k]
+    best = max(best, window)
+```
+
+### 信号（看到这些词就想到滑动窗口）
+- 连续 contiguous、子数组 subarray、子串 substring
+- 长度为 k（定长）/ 最长、最短（可变长）
+- 求一段的和、平均、个数的最大最小
+
+### 每题变在哪
+- **643 Maximum Average Subarray I**（定长，Easy）：模板原样用，窗口里放的是“和”；长度都是 k，和最大 = 平均最大，最后 `best / k`
+- **1456 Maximum Number of Vowels**（定长）：（学到时填）
+- **1004 Max Consecutive Ones III**（可变长）：（学到时填）
+- **1493 Longest Subarray of 1's After Deleting One Element**（可变长）：（学到时填）
+
+### 我的思考过程
+- **643**（11/25，周三晚上）：
+  - 题目第 ③ 句 calculation error 不懂 → 就是除法小数差一点也算对，写代码不用管
+  - `nums[:k]` → 切片，顾头不顾尾，正好前 k 个；术语表原来只写了“取出一段”，展开了
+  - `range(k, len(nums))` 为什么从 k 开始 → i 是新进来的数，0 ~ k−1 已经算在第一个窗口里
+  - `len(nums)` 要不要 −1 → 和双指针 `right = len(nums) - 1` 比：当门牌号要 −1，放进 range 当结尾不要
+  - `i - k` 加 1 减 1 搞晕 → 不数“往左几步”，看成进来和出去的下标差 k；搞不清就代 i = 4 进去算
+
+### 容易错的地方
+- `range(k, len(nums))` 不要写成 `len(nums) - 1`：会漏掉最后一个窗口
+- 第一个窗口在循环**前**算好，循环只负责后面的滑动
+- 出去的是 `nums[i - k]`，不是 `nums[i - k + 1]`；不确定就代一个数进去验证
+
+---
+
 ## 4. Prefix Sum 前缀和 / 前缀积（先从 238 开头，第 4 类学到时补全）
 
 > 238 Product of Array Except Self 排在第 1 类，但用的是这一类的套路，所以记在这里。
@@ -202,6 +248,5 @@ for i in range(n):
 
 ## 其他类别（学到时按上面的格式写）
 - 1. Array / String 数组/字符串（9 题第一遍已完成 11/18，套路总结待补写）
-- 3. Sliding Window 滑动窗口
 - 5. Hash Map / Set 哈希表/集合
 - ……

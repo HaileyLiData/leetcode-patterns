@@ -345,3 +345,32 @@ class Solution:
                 right = right - 1
         return count
 ```
+
+## 3. Sliding Window 滑动窗口
+
+### 643. Maximum Average Subarray I 子数组最大平均数 I (Easy)
+
+[题目链接](https://leetcode.com/problems/maximum-average-subarray-i/)
+
+- 题目：找长度正好是 k 的连续子数组（contiguous subarray），返回最大的平均值；误差小于 10^-5 算对（除法有小数，写代码不用管）
+- 每段长度都是 k → 和最大的那段平均也最大 → 先找最大的和，最后除以 k
+- 思路：长度 k 的框（窗口）每次往右挪一格
+  - 第一个窗口：`sum(nums[:k])`，前 k 个（切片 [开始:结束] 顾头不顾尾）
+  - 挪一格只变两个数：新的和 = 旧的和 + 进来的 − 出去的，不用重新加 k 个
+  - 进来 `nums[i]`，出去 `nums[i - k]`：两个下标正好差 k（隔着一个窗口的长度）
+- `for i in range(k, len(nums))`：i = 新进来的数；0～k−1 已经在第一个窗口里，所以从 k 开始
+- 易错：
+  - `range(k, len(nums))` 不要 −1：range 自己不取结尾；`right = len(nums) - 1` 是直接当门牌号才要 −1
+  - `i - k` 搞不清就代 i = 4 进去算，不要在脑子里加 1 减 1
+- 时间 O(n)，空间 O(1)
+
+```python
+class Solution:
+    def findMaxAverage(self, nums: List[int], k: int) -> float:
+        window = sum(nums[:k])
+        best = window
+        for i in range(k, len(nums)):
+            window = window + (nums[i] - nums[i - k])
+            best = max(best, window)
+        return best / k
+```
