@@ -175,7 +175,7 @@ for right in range(len(nums)):        # 右边每步扩一格
 - **643 Maximum Average Subarray I**（定长，Easy）：模板原样用，窗口里放的是“和”；长度都是 k，和最大 = 平均最大，最后 `best / k`
 - **1456 Maximum Number of Vowels**（定长，Medium）：窗口里放“元音个数”；第一个窗口 for + if 数元音，滑动时两个 if：进来是元音 +1、出去是元音 −1（不能用 elif，进出可能都是元音）。和 643 一样进加出减，只是加减的是 1 或 0
 - **1004 Max Consecutive Ones III**（可变长，Medium）：先换个说法——最长的一段、里面 0 不超过 k 个。“框里算的” = 0 的个数 zeros；“不合法” = zeros > k。k 不是框长。缩时扔的是 1 也要挪（挡在 0 前面）
-- **1493 Longest Subarray of 1's After Deleting One Element**（可变长）：（学到时填）
+- **1493 Longest Subarray of 1's After Deleting One Element**（可变长，Medium）：1004 的 k = 1，“不合法” = zeros > 1；必须删一个 → 框长再减 1，用 `right - left`。全是 1 也得删一个
 
 ### 我的思考过程
 - **643**（11/25，周三晚上）：
@@ -195,6 +195,10 @@ for right in range(len(nums)):        # 右边每步扩一格
   - 两个都是 6 怎么选 → 不用选，只要长度
   - enumerate 没见过 → 换成熟悉的 range(len(nums))；range 生成什么总忘 → 每题注释都加了提醒
   - 没写左边是 1 的情况？→ 缩进：left + 1 在 if 外面；是 1 为什么也要移？→ 框要连续，宁可短也要合法
+- **1493**（11/26，同一晚）：
+  - enumerate 还是换成熟悉的 range(len(nums))
+  - 脑子有点糊涂 → 用例 1 [1,1,0,1] 一圈圈走：只有 1 个 0，while 没进，第 4 圈 right − left = 3
+  - 代码里没看到“删掉这个 0”→ 对，没真删；删 = 长度少 1，所以 right − left
 
 ### 容易错的地方
 - `range(k, len(nums))` 不要写成 `len(nums) - 1`：会漏掉最后一个窗口
@@ -204,6 +208,7 @@ for right in range(len(nums)):        # 右边每步扩一格
 - 进来、出去要分别检查时用**两个 if**，不是 if / elif（1456）
 - 可变长窗口缩用 **while** 不是 if：可能连着缩好几格（1004）
 - 框长 = `right - left + 1`：两头都包含，要 +1（1004）
+- 要删掉一个元素时，长度再 −1 → `right - left`；全是 1 也必须删（1493）
 
 ---
 

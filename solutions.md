@@ -442,3 +442,31 @@ class Solution:
             best = max(best, right - left + 1)
         return best
 ```
+
+### 1493. Longest Subarray of 1's After Deleting One Element 删掉一个元素以后全为 1 的最长子数组 (Medium)
+
+[题目链接](https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/)
+
+- 题目：只含 0 和 1 的数组，**必须**删掉一个元素，删完后最长的全 1 连续段有多长；没有 1 返回 0
+- 换个说法：就是 1004 的 k = 1——找最长的一段，里面 0 不超过 1 个；框里那个 0 就是要删的
+- 和 1004 唯一不同：1004 是“翻”，翻完长度不变；这题是“删”，删完少一格 → 框长 `right - left + 1` 再减 1 = `right - left`
+- 代码没真删任何东西：删 = 长度少 1；“翻”“删”都只在脑子里做，代码只算长度
+- 全是 1 也对：[1,1,1] 框长 3，必须删一个 → 2
+- 时间 O(n)，空间 O(1)
+
+```python
+class Solution:
+    def longestSubarray(self, nums: List[int]) -> int:
+        left = 0
+        zeros = 0
+        best = 0
+        for right in range(len(nums)):
+            if nums[right] == 0:
+                zeros = zeros + 1
+            while zeros > 1:
+                if nums[left] == 0:
+                    zeros = zeros - 1
+                left = left + 1
+            best = max(best, right - left)
+        return best
+```
