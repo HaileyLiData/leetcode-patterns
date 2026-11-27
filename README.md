@@ -15,4 +15,4 @@ Notes in the code and in patterns.md are mostly in Chinese.
 |---|---------|------|
 | 1 | Array / String | 9 / 9 |
 | 2 | Two Pointers | 4 / 4 |
-| 3 | Sliding Window | 2 / 4 |
+| 3 | Sliding Window | 3 / 4 |

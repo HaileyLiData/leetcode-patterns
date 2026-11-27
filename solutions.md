@@ -408,3 +408,37 @@ class Solution:
             best = max(best, count)
         return best
 ```
+
+### 1004. Max Consecutive Ones III 最大连续 1 的个数 III (Medium)
+
+[题目链接](https://leetcode.com/problems/max-consecutive-ones-iii/)
+
+- 题目：只含 0 和 1 的数组，最多把 k 个 0 翻成 1，连续的 1 最多有几个（1's 的 's 是复数，不是“的”）
+- 💡 换个说法（这题的关键）：找最长的一段，里面 0 不超过 k 个；不用真的去翻。不是找“1 多的地方”，是找“0 少的长区间”
+- 思路：第一道**可变长窗口**（k 不是框长，是框里最多几个 0）
+  - 右边：每步往右扩一格；拉进来的是 0 → zeros + 1
+  - 左边：zeros > k 时往右缩，直到 0 不超过 k 个；扔出去的是 0 → zeros − 1
+  - 每步记框长 `right - left + 1`，留最长的
+  - 像吃东西：右边每步吃一个，吃撑了左边才吐，吐到不撑为止
+- 缩用 `while`：可能连着缩好几格（挡在 0 前面的 1 也要扔，框必须连续）
+- `left = left + 1` 在 if 外面：扔的是 1 也照样挪
+- 框长 +1：两头都包含（left = 4、right = 9 → 6 个），又是差一
+- 一样长的两段不用选：题目只要长度，best 只记成绩
+- 时间 O(n)（left、right 各最多走 n 步），空间 O(1)
+
+```python
+class Solution:
+    def longestOnes(self, nums: List[int], k: int) -> int:
+        left = 0
+        zeros = 0
+        best = 0
+        for right in range(len(nums)):
+            if nums[right] == 0:
+                zeros = zeros + 1
+            while zeros > k:
+                if nums[left] == 0:
+                    zeros = zeros - 1
+                left = left + 1
+            best = max(best, right - left + 1)
+        return best
+```
