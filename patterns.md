@@ -142,7 +142,7 @@ for fast in range(len(arr)):    # fast 快指针：一格一格往前探路
 
 两种窗口：
 - **定长**（fixed size）：框的长度固定是 k（643、1456）
-- **可变长**（variable size）：右边一直扩，不符合条件时左边收（1004、1493，学到时补）
+- **可变长**（variable size）：右边一直扩，不符合条件时左边收（1004、1493）
 
 ### 模板代码
 
@@ -155,6 +155,17 @@ for i in range(k, len(nums)):            # i = 新进来的数的下标，从 k 
     best = max(best, window)
 ```
 
+**可变长窗口**（右边吃、左边吐）
+```python
+left = 0
+for right in range(len(nums)):        # 右边每步扩一格
+    把 nums[right] 算进框里
+    while 框不合法:                      # 吃撑了
+        把 nums[left] 从框里拿掉
+        left = left + 1                 # 左边缩一格（在 if 外面，每圈都挪）
+    best = max(best, right - left + 1)  # 框长：两头都含，所以 +1
+```
+
 ### 信号（看到这些词就想到滑动窗口）
 - 连续 contiguous、子数组 subarray、子串 substring
 - 长度为 k（定长）/ 最长、最短（可变长）
@@ -163,7 +174,7 @@ for i in range(k, len(nums)):            # i = 新进来的数的下标，从 k 
 ### 每题变在哪
 - **643 Maximum Average Subarray I**（定长，Easy）：模板原样用，窗口里放的是“和”；长度都是 k，和最大 = 平均最大，最后 `best / k`
 - **1456 Maximum Number of Vowels**（定长，Medium）：窗口里放“元音个数”；第一个窗口 for + if 数元音，滑动时两个 if：进来是元音 +1、出去是元音 −1（不能用 elif，进出可能都是元音）。和 643 一样进加出减，只是加减的是 1 或 0
-- **1004 Max Consecutive Ones III**（可变长）：（学到时填）
+- **1004 Max Consecutive Ones III**（可变长，Medium）：先换个说法——最长的一段、里面 0 不超过 k 个。“框里算的” = 0 的个数 zeros；“不合法” = zeros > k。k 不是框长。缩时扔的是 1 也要挪（挡在 0 前面）
 - **1493 Longest Subarray of 1's After Deleting One Element**（可变长）：（学到时填）
 
 ### 我的思考过程
@@ -178,6 +189,12 @@ for i in range(k, len(nums)):            # i = 新进来的数的下标，从 k 
   - 💡 自己看出“这里还没开始滑，只是最开始的状态”→ 代码顺序开始变成自己的东西
   - range(3, 9) 以为不含 3（“太鬼扯了”）→ 规则就是开头要、结尾不要，跑一下就知道
   - 最后自己代数：k = 3、i = 3 是第 4 个，i − k = 0 是第 1 个 → 自己确认对了
+- **1004**（11/25 开头、11/26 完成）：
+  - 第二个例子 k = 3 → 10 以为翻不出来 → 我在找“1 多的地方”；💡 关键是“0 少的长区间”，三小块 1 被 3 个 0 隔开，翻掉就连起来
+  - 知道要找最长区间，但不知道怎么找 → 用例 1 一步步走：右边吃、左边吐
+  - 两个都是 6 怎么选 → 不用选，只要长度
+  - enumerate 没见过 → 换成熟悉的 range(len(nums))；range 生成什么总忘 → 每题注释都加了提醒
+  - 没写左边是 1 的情况？→ 缩进：left + 1 在 if 外面；是 1 为什么也要移？→ 框要连续，宁可短也要合法
 
 ### 容易错的地方
 - `range(k, len(nums))` 不要写成 `len(nums) - 1`：会漏掉最后一个窗口
@@ -185,6 +202,8 @@ for i in range(k, len(nums)):            # i = 新进来的数的下标，从 k 
 - 出去的是 `nums[i - k]`，不是 `nums[i - k + 1]`；不确定就代一个数进去验证
 - `range(开头, 结尾)`：**包含开头、不包含结尾**，不是两头都不包含（1456 错过）
 - 进来、出去要分别检查时用**两个 if**，不是 if / elif（1456）
+- 可变长窗口缩用 **while** 不是 if：可能连着缩好几格（1004）
+- 框长 = `right - left + 1`：两头都包含，要 +1（1004）
 
 ---
 
